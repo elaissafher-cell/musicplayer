@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0f72c72d2f.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="music-player">
+      <nav>
+        <div class="circle">
+          <i class="fa-solid fa-angle-left"></i>
+        </div>
+        <div class="circle">
+          <i class="fa-solid fa-bars"></i>                
+        </div>
+      </nav>
+
+      <img src="burstday.jpg" class="song-img" id="songImg">
+      <h1 id="title">Thunder</h1>
+      <p id="artist">Seventeen</p>
+
+      <audio id="song">
+        <source src="thunder.mp3" type="audio/mpeg">
+      </audio>
+      <input type="range" value="0" id="progress">
+
+      <div class="controls">
+        <div onclick="prevSong()"><i class="fa-solid fa-backward"></i></div>
+        <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+        <div onclick="nextSong()"><i class="fa-solid fa-forward"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let progress = document.getElementById("progress");
+    let song = document.getElementById("song");
+    let ctrlIcon = document.getElementById("ctrlIcon");
+    let songImg = document.getElementById("songImg");
+    let title = document.getElementById("title");
+    let artist = document.getElementById("artist");
+
+    // Playlist array
+    let playlist = [
+      { 
+        title: "Thunder", 
+        artist: "Seventeen", 
+        src: "thunder.mp3", 
+        img: "burstday.jpg" 
+      },
+      { 
+        title: "HBD", 
+        artist: "Seventeen", 
+        src: "HBD.mp3", 
+        img: "loves.jpg" 
+      },
+      { 
+        title: "Bad Influence", 
+        artist: "Seventeen", 
+        src: "BadInfluence.mp3", 
+        img: "lovess.jpg" 
+      },
+      { 
+        title: "Skyfall", 
+        artist: "THE 8 Solo", 
+        src: "Skyfall.mp3", 
+        img: "the8.jpg" 
+      },
+      { 
+        title: "Fortunate Change", 
+        artist: "JOSHUA Solo", 
+        src: "FortunateChange.mp3", 
+        img: "joshua.jpg" 
+      },
+      { 
+        title: "99.9%", 
+        artist: "WONWOO Solo", 
+        src: "99.9.mp3", 
+        img: "wonu.jpg" 
+      },
+      { 
+        title: "Raindrops", 
+        artist: "SEUNGKWAN Solo", 
+        src: "Raindrops.mp3", 
+        img: "seungkwan.jpg" 
+      },
+      { 
+        title: "Damage", 
+        artist: "HOSHI Solo", 
+        src: "Damage.mp3", 
+        img: "hoshi.jpg" 
+      },
+      { 
+        title: "Shake It Off", 
+        artist: "MINGYU Solo", 
+        src: "ShakeItOff.mp3", 
+        img: "mingyu.jpg" 
+      },
+      { 
+        title: "Happy Virus", 
+        artist: "DK Solo", 
+        src: "HappyVirus.mp3", 
+        img: "dk.jpg" 
+      },
+      { 
+        title: "Destiny", 
+        artist: "WOOZI Solo", 
+        src: "Destiny.mp3", 
+        img: "woozi.jpg" 
+      },{ 
+        title: "Shining Star", 
+        artist: "VERNON Solo", 
+        src: "ShiningStar.mp3", 
+        img: "vernon.jpg" 
+      },
+      { 
+        title: "Gemini", 
+        artist: "JUN Solo", 
+        src: "Gemini.mp3", 
+        img: "jun.jpg" 
+      },
+      { 
+        title: "Trigger", 
+        artist: "DINO Solo", 
+        src: "Trigger.mp3", 
+        img: "dino.jpg" 
+      },
+      { 
+        title: "Coincidence", 
+        artist: "JEONGHAN Solo", 
+        src: "Coincidence.mp3", 
+        img: "hannie.jpg" 
+      },{ 
+        title: "Jungle", 
+        artist: "S.COUPS(Solo)", 
+        src: "Jungle.mp3", 
+        img: "coups.jpg" 
+      }
+    ];
+
+    let currentSongIndex = 0;
+
+    function loadSong(index) {
+      let track = playlist[index];
+      song.src = track.src;
+      songImg.src = track.img;
+      title.innerText = track.title;
+      artist.innerText = track.artist;
+      song.load();
+      playSong();
+    }
+
+    function playSong() {
+      song.play();
+      ctrlIcon.classList.add("fa-pause");
+      ctrlIcon.classList.remove("fa-play");
+    }
+
+    function playPause() {
+      if (ctrlIcon.classList.contains("fa-pause")) {
+        song.pause();
+        ctrlIcon.classList.remove("fa-pause");
+        ctrlIcon.classList.add("fa-play");
+      } else {
+        playSong();
+      }
+    }
+
+    function nextSong() {
+      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      loadSong(currentSongIndex);
+    }
+
+    function prevSong() {
+      currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+      loadSong(currentSongIndex);
+    }
+
+    // Progress bar setup
+    song.onloadedmetadata = function () {
+      progress.max = song.duration;
+      progress.value = song.currentTime;
+    }
+
+    if (song.play()) {
+      setInterval(() => {
+        progress.value = song.currentTime;
+      }, 500);
+    }
+
+    progress.onchange = function () {
+      song.currentTime = progress.value;
+      playSong();
+    }
+  </script>
+</body>
+</html>
